@@ -111,6 +111,9 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
     response = curl_easy_perform(curl);
+    if (response != CURLE_OK) {
+        fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
+    }
 
     c_cleanup(headers, curl);
     free_resources(x_api_key, x_private_key, x_secret_key, payload);
