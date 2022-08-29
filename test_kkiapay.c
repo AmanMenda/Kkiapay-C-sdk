@@ -10,4 +10,5 @@ int main(void)
     kkiapay->private_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     kkiapay->secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     verify_transaction(kkiapay, "xxxxxxxxx");
+    free(kkiapay);
 }
