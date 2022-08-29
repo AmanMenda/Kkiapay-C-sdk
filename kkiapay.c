@@ -82,6 +82,7 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
     if (!payload)
         fprintf(stderr, "Secret key is undefined");
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload);
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     curl_easy_setopt(curl, CURLOPT_URL, url);
     response = curl_easy_perform(curl);
     if (response != CURLE_OK) {
