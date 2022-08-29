@@ -22,6 +22,6 @@ init_kkiapay_values(kkiapay_t *kkiapay, char *private_key, char *public_key,
 {
     kkiapay->private_key = private_key;
     kkiapay->public_key = public_key;
-    kkiapay->secret = NULL;
+    kkiapay->secret = secret;
     kkiapay->sandbox = false; 
 }

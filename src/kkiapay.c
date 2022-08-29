@@ -9,7 +9,7 @@ struct memory {
    size_t size;
  };
  
- static size_t cb(void *data, size_t size, size_t nmemb, void *userp)
+static size_t cb(void *data, size_t size, size_t nmemb, void *userp)
  {
     size_t realsize = size * nmemb;
     struct memory *mem = (struct memory *)userp;
@@ -24,7 +24,7 @@ struct memory {
    mem->response[mem->size] = 0;
  
    return realsize;
- }
+}
 
 unsigned char *hash(kkiapay_t *kkiapay, char *hash)
 {   
@@ -113,6 +113,9 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
     response = curl_easy_perform(curl);
     if (response != CURLE_OK) {
         fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
+    } else {
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &code);
+        printf("\nRES_CODE: %ld", code);
     }
 
     c_cleanup(headers, curl);
@@ -120,4 +123,3 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
     printf("\nRes: %s\n", chunk.response);
     return (chunk.response);
 }
-
