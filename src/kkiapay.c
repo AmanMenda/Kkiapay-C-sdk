@@ -1,5 +1,5 @@
-#include "./headers/constants.h"
-#include "./headers/kkiapay.h"
+#include "../headers/constants.h"
+#include "../headers/kkiapay.h"
 #include <openssl/sha.h>
 
 static char *last_response;
@@ -106,7 +106,7 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
         fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
     }
     curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &code);
-    printf("%ld", code);
+    printf("\nRES_CODE: %ld", code);
 
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, (void *)&chunk);
@@ -117,6 +117,7 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
 
     c_cleanup(headers, curl);
     free_resources(x_api_key, x_private_key, x_secret_key, payload);
+    printf("\nRes: %s\n", chunk.response);
     return (chunk.response);
 }
 

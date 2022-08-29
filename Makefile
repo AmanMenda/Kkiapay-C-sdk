@@ -20,12 +20,12 @@ $(NAME):	$(OBJ)
 	gcc -o $(NAME) $(OBJ) -g3 -lcurl -lcrypto
 
 clean:
-	-rm -f $(OBJ)
+	-rm -f src/$(OBJ)
 
 fclean:	clean
 	-rm -f $(NAME)
-	-rm -f *~
-	-rm -f *#
+	-rm -f src/*~
+	-rm -f src/*#
 	-rm -f vgcore.*
 
 re:	fclean all

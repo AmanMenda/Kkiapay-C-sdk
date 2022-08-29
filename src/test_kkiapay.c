@@ -1,5 +1,5 @@
-#include "./headers/constants.h"
-#include "./headers/kkiapay.h"
+#include "../headers/constants.h"
+#include "../headers/kkiapay.h"
 
 int main(void)
 {

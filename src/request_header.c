@@ -1,5 +1,5 @@
-#include "./headers/constants.h"
-#include "./headers/kkiapay.h"
+#include "../headers/constants.h"
+#include "../headers/kkiapay.h"
 
 char *retrieve_x_api_key(kkiapay_t *kkiapay)
 {

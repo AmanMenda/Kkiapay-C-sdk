@@ -1,5 +1,5 @@
-#include "./headers/constants.h"
-#include "./headers/kkiapay.h"
+#include "../headers/constants.h"
+#include "../headers/kkiapay.h"
 
 char *get_private_key(kkiapay_t *kkiapay)
 {
