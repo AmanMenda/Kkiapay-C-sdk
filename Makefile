@@ -9,7 +9,7 @@ SRC	=	$(shell find . -type f -name "*.c")
 
 OBJ	=	$(SRC:.c=.o)
 
-NAME	=	Clib
+NAME	=	Kkiapay-sdk
 
 all:	$(NAME)
 
