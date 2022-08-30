@@ -19,7 +19,8 @@ TEST_SRC	=	src/data.c \
 				tests/test_get_public_key.c \
 				tests/test_get_secret.c \
 				tests/test_retrieve_infos.c \
-				tests/test_init_values.c
+				tests/test_init_values.c \
+				tests/test_verify_transaction.c
 
 TEST_OBJ	=	$(TEST_SRC:.c=.o)
 

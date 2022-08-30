@@ -29,4 +29,6 @@ extern char *retrieve_transaction_id(kkiapay_t *kkiapay, void *transaction_id);
 
 extern char *retrieve_x_api_key(kkiapay_t *kkiapay);
 
+extern void free_resources(char *x_api_key, char *x_private_key, char *x_secret_key, char *transactionId);
+
 #endif

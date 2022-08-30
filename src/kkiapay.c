@@ -10,7 +10,7 @@ struct memory {
  };
  
 static size_t cb(void *data, size_t size, size_t nmemb, void *userp)
- {
+{
     size_t realsize = size * nmemb;
     struct memory *mem = (struct memory *)userp;
     char *ptr = realloc(mem->response, mem->size + realsize + 1);
@@ -31,7 +31,6 @@ unsigned char *hash(kkiapay_t *kkiapay, char *hash)
     hash = calloc(SHA224_DIGEST_LENGTH, sizeof(char));
     if (get_secret(kkiapay) == NULL) {
         fprintf(stderr, "Secret key has not been set");
-        return (unsigned char *)EXIT_FAILURE;
     }
     SHA256(get_secret(kkiapay), strlen(kkiapay->secret), (unsigned char *)hash);
     return (unsigned char *)hash;
@@ -43,6 +42,11 @@ void free_resources(char *x_api_key, char *x_private_key, char *x_secret_key, ch
     free(x_private_key);
     free(x_secret_key);
     free(transactionId);
+
+    x_api_key[0] = '\0';
+    x_private_key[0] = '\0';
+    x_secret_key[0] = '\0';
+    transactionId[0] = '\0';
 }
 
 void c_cleanup(struct curl_slist *headers, CURL *curl)
@@ -99,7 +103,7 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
     if (!payload)
         fprintf(stderr, "Secret key is undefined");
     curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload);
-    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+    // curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
     curl_easy_setopt(curl, CURLOPT_URL, url);
     response = curl_easy_perform(curl);
     if (response != CURLE_OK) {
@@ -113,7 +117,6 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
     response = curl_easy_perform(curl);
     if (response != CURLE_OK) {
         fprintf(stderr, "Request failed: %s\n", curl_easy_strerror(response));
-    } else {
         curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &code);
         printf("\nRES_CODE: %ld", code);
     }

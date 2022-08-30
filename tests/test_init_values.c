@@ -14,4 +14,5 @@ Test(init_kkiapay_values, fields_not_empty)
     cr_assert_not_null(kkiapay->public_key);
     cr_assert_not_null(kkiapay->secret);
     cr_assert_not(kkiapay->sandbox);
+    free(kkiapay);
 }

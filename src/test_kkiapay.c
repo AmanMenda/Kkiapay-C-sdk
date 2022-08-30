@@ -6,9 +6,9 @@ int main(void)
     kkiapay_t *kkiapay = (kkiapay_t *)malloc(sizeof(*kkiapay));
 
     kkiapay->sandbox = true;
-    kkiapay->public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    kkiapay->private_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    kkiapay->secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    kkiapay->public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    kkiapay->private_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
+    kkiapay->secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
     verify_transaction(kkiapay, "xxxxxxxxx");
     free(kkiapay);
 }
