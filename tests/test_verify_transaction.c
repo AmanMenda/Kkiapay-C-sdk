@@ -4,22 +4,24 @@
 #include "../headers/kkiapay.h"
 #include "../headers/constants.h"
 
-Test(free_resources, all_resources_are_freed)
+Test(free_resources, sandbox_url)
 {
     kkiapay_t *kkiapay = malloc(sizeof(*kkiapay));
 
-    kkiapay->public_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    kkiapay->private_key = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    kkiapay->secret = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
-    char *x_api_key = retrieve_x_api_key(kkiapay);
-    char *x_private_key = retrieve_x_private_key(kkiapay);
-    char *secret_key = retrieve_x_secret_key(kkiapay);
-    char *transactionId = retrieve_transaction_id(kkiapay, "xxxxxxxxx");
+    kkiapay->sandbox = true;
+    char url[120] = {0};
+    
+    retrieve_url(kkiapay, url);
+    cr_assert_str_eq(url, "https://api-sandbox.kkiapay.me/api/v1/transactions/status");
+}
 
-    free_resources(x_api_key, x_private_key, secret_key, transactionId);
-    printf("%s", x_api_key);
-    cr_assert_str_empty(x_api_key);
-    cr_assert_str_empty(x_private_key);
-    cr_assert_str_empty(secret_key);
-    cr_assert_str_empty(transactionId);
+Test(free_resources, base_url)
+{
+    kkiapay_t *kkiapay = malloc(sizeof(*kkiapay));
+
+    kkiapay->sandbox = false;
+    char url[120] = {0};
+    
+    retrieve_url(kkiapay, url);
+    cr_assert_str_eq(url, "https://api.kkiapay.me/api/v1/transactions/status");
 }

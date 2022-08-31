@@ -24,4 +24,6 @@ extern char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id);
 
 static size_t cb(void *data, size_t size, size_t nmemb, void *userp);
 
+extern void retrieve_url(kkiapay_t *kkiapay, char *url);
+
 #endif

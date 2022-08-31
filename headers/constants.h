@@ -20,7 +20,6 @@
     #include <string.h>
     #include "kkiapay.h"
 
-
 extern char *retrieve_x_private_key(kkiapay_t *kkiapay);
 
 extern char *retrieve_x_secret_key(kkiapay_t *kkiapay);

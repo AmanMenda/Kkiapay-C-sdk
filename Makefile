@@ -51,7 +51,7 @@ fclean:	clean
 re:	fclean all
 
 tests_run:	 $(TEST_SRC)
-	gcc -o $(TEST_NAME) $(TEST_SRC) --coverage -lcriterion -lcurl -lcrypto
+	gcc -o $(TEST_NAME) $(TEST_SRC) -g3 --coverage -lcriterion -lcurl -lcrypto
 	./$(TEST_NAME)
 	gcovr --exclude tests/
 

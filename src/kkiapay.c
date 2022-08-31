@@ -18,12 +18,12 @@ static size_t cb(void *data, size_t size, size_t nmemb, void *userp)
     if (ptr == NULL)
         return 0;
  
-   mem->response = ptr;
-   memcpy(&(mem->response[mem->size]), data, realsize);
-   mem->size += realsize;
-   mem->response[mem->size] = 0;
- 
-   return realsize;
+    mem->response = ptr;
+    memcpy(&(mem->response[mem->size]), data, realsize);
+    mem->size += realsize;
+    mem->response[mem->size] = 0;
+
+    return realsize;
 }
 
 unsigned char *hash(kkiapay_t *kkiapay, char *hash)
@@ -42,11 +42,6 @@ void free_resources(char *x_api_key, char *x_private_key, char *x_secret_key, ch
     free(x_private_key);
     free(x_secret_key);
     free(transactionId);
-
-    x_api_key[0] = '\0';
-    x_private_key[0] = '\0';
-    x_secret_key[0] = '\0';
-    transactionId[0] = '\0';
 }
 
 void c_cleanup(struct curl_slist *headers, CURL *curl)
@@ -54,6 +49,17 @@ void c_cleanup(struct curl_slist *headers, CURL *curl)
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
     curl_global_cleanup();
+}
+
+void retrieve_url(kkiapay_t *kkiapay, char *url)
+{
+    if (kkiapay->sandbox) {
+        strcpy(url, KKIAPAY_SANDBOX_URL);
+    } else {
+        strcpy(url, KKIAPAY_BASE_URL);
+    }
+    strcat(url, "/api/v1/transactions/status");
+    printf("URL: %s\n", url);
 }
 
 char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
@@ -76,14 +82,7 @@ char *verify_transaction(kkiapay_t *kkiapay, void *transaction_id)
         fprintf(stderr, "curl initialisation failure\n");
     }
 
-    if (kkiapay->sandbox) {
-        strcpy(url, KKIAPAY_SANDBOX_URL);
-    } else {
-        strcpy(url, KKIAPAY_BASE_URL);
-    }
-    strcat(url, "/api/v1/transactions/status");
-    printf("URL: %s\n", url);
-
+    retrieve_url(kkiapay, url);
     headers = curl_slist_append(headers, "Accept: application/json");
 
     if (!x_api_key)
