@@ -1,0 +1,295 @@
+openapi: '3.0.3'
+
+info:
+  title: Kkiapay REST API
+  description: |
+    This API allows some operations such as verifying transactions
+    status
+  version: "2.0"  #Assumed
+
+servers:
+  - url: https://api.kkiapay.me/api/v1
+    description: Base url
+  - url: https://api-sandbox.kkiapay.me/api/v1
+    description: Sandbox url
+
+paths:
+  /transactions/status:
+    post:
+      summary: Get transaction status by Id
+      tags:
+        - transactions
+      parameters:
+        - $ref: '#/components/parameters/h1'
+        - $ref: '#/components/parameters/h2'
+        - $ref: '#/components/parameters/h3'
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/TransactionIdReqBody'
+      responses:
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/transactionRes'
+        "401":
+          $ref: '#/components/responses/401Unauthorized'
+        "500":
+          $ref: '#/components/responses/500InternalServerError'
+
+  /transactions/revert:
+      post:
+        summary: Revert a transaction
+        tags:
+          - transactions
+        parameters:
+          - $ref: '#/components/parameters/h1'
+        requestBody:
+          required: true
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/RevertTransactionReqBody'
+        responses:
+          "200":
+            description: "OK"
+            content:
+              'application/json':
+                schema:
+                  $ref: '#/components/schemas/RevertTransactionRes'
+          "400":
+            $ref: '#/components/responses/401Unauthorized'
+          "500":
+            $ref: '#/components/responses/500InternalServerError'
+
+  /payments/request:
+    post:
+      summary: Request payment
+      tags:
+        - payments
+      parameters:
+        - $ref: '#/components/parameters/h1'
+      requestBody:
+        required: true
+        content:
+          'application/json':
+            schema:
+              $ref: '#/components/schemas/RequestPaymentReqBody'
+      responses:
+        "200":
+          description: "OK"
+          content:
+            'application/json':
+              schema:
+                $ref: '#/components/schemas/paymentRes'
+        "400":
+          $ref: '#/components/responses/401Unauthorized'
+        "500":
+          $ref: '#/components/responses/500InternalServerError'
+
+components:
+  responses:
+    401Unauthorized:
+      description: "Unauthorized"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              reason:
+                type: string
+     
+    500InternalServerError:
+      description: "Internal Server Error"
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              reason:
+                type: string
+
+
+  parameters:
+    h1:
+      in: header
+      name: x-api-key
+      schema:
+        type: string
+      required: true
+    h2:
+      in: header
+      name: x-private-key
+      schema:
+        type: string
+      required: true
+    h3:
+      in: header
+      name: x-secret-key
+      schema:
+        type: string
+      required: true
+
+
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+
+
+  schemas:
+    client:
+      type: object
+      properties:
+        meta_data:
+          type: string
+          description: general infos
+        isNewGeneration:
+          type: boolean
+        fullname:
+          type: string
+        country:
+          type: string
+        phone:
+          type: string
+          description: phone number
+        email:
+          type: string
+        person:
+          type: string
+          nullable: true
+
+    TransactionIdReqBody:
+      type: object
+      properties:
+        transactionId:
+          type: string
+
+    transactionRes:
+      type: object
+      properties:
+        performed_at:
+          type: string
+          description: Date
+        type:
+          type: string
+        status:
+          type: string
+          enum: ["SUCCESS", "PENDING", "FAILURE"]
+          description: Transaction status
+        source:
+          type: string
+          enum: ["MOBILE_MONEY", "XXX"]
+          description: The source from which the payment has be done
+        source_common_name:
+          type: string
+          description: Known name of the source'
+        amount:
+          type: number
+        fees:
+          type: number
+        net:
+          type: number
+        paymentlink:
+          type: string
+          nullable: true
+        country:
+          type: string
+          description: The country from which the payment has be done
+        reason:
+          type: string
+          description: Reason of the payment
+        state:
+          type: string
+          nullable: true
+        partnerId:
+          type: string
+          description: To be done
+        client:
+          $ref: '#/components/schemas/client'
+        transactionId:
+          type: string
+        performedAt:
+          type: string
+
+    RevertTransactionReqBody:
+      type: object
+      properties:
+        internalTransactionId:
+          type: string
+
+    RevertTransactionRes:
+      type: object
+      properties:
+        status:
+          type: string
+          maxLength: 4
+        description:
+          type: string
+
+    RequestPaymentReqBody:
+      type: object
+      properties:
+        amount:
+          type: number
+        phoneNumber:
+          type: number
+        fullname:
+          type: string
+        email:
+          type: string
+        stateData:
+          type: object
+          properties:
+            mood:
+              type: string
+            age:
+              type: number
+            name:
+              type: string
+            article:
+              type: string
+        country:
+          type: string
+
+    paymentRes:
+      type: object
+      properties:
+        transactionId:
+          type: string
+        internalTransactionId:
+          type: string
+        status:
+          type: string
+        phoneNumber:
+          type: string
+        
+    # ValidateMtnAccountReqBody:
+    #   type: object
+    #   properties:
+    #     phoneNumber:
+    #       type: string
+    #       maxLength: 11 #8 + country_code
+    
+    # MakeDepositRequestReqBody:
+    #   type: object
+    #   properties:
+    #     phoneNumber:
+    #       type: string
+    #       maxLength: 11
+    #     amount:
+    #       type: number
+    #       minimum: 1
+    #     reason:
+    #       type: string
+
+security:
+  - bearerAuth: []
